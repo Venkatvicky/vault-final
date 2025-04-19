@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: injector
-          image: hashicorp/vault-k8s:1.19.2
+          image: hashicorp/vault:1.19.2
           imagePullPolicy: Always
           env:
             - name: VAULT_ADDR
