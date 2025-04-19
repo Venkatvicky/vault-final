@@ -25,18 +25,18 @@ spec:
           image: hashicorp/vault:1.19.2
           imagePullPolicy: Always
           securityContext:
-            allowPrivilegeEscalation: true  # Temporarily allow privilege escalation for debugging
-            readOnlyRootFilesystem: false  # Temporarily allow read-write access for debugging
+            allowPrivilegeEscalation: true
+            readOnlyRootFilesystem: false
             capabilities:
-              drop:
-                - SETFCAP  # Drop the problematic capability
+              add:
+                - SETFCAP  # Add the required capability
                 - NET_RAW
-                - ALL
             runAsUser: 65534
             runAsGroup: 65534
             fsGroup: 65534
             seccompProfile:
               type: RuntimeDefault
+            privileged: true  # Allow privileged mode for debugging
           resources:
             requests:
               memory: "64Mi"
