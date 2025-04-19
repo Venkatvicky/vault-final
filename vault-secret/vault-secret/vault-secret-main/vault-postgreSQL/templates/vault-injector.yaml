@@ -7,11 +7,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: vault-agent  # <-- REQUIRED
+      app: vault-agent
   template:
     metadata:
       labels:
-        app: vault-agent  # <-- MUST MATCH selector.matchLabels
+        app: vault-agent
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -22,13 +22,14 @@ spec:
           type: RuntimeDefault
       containers:
         - name: vault-agent
-          image: hashicorp/vault:1.19.2 # Replace <digest> with actual value
+          image: hashicorp/vault:1.19.2
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             capabilities:
               drop:
+                - SETFCAP  # Drop the problematic capability
                 - NET_RAW
                 - ALL
             runAsUser: 65534
