@@ -22,7 +22,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: vault-agent
-          image: hashicorp/vault@sha256:<digest>  # Replace <digest> with actual value
+          image: hashicorp/vault:1.19.2 # Replace <digest> with actual value
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
