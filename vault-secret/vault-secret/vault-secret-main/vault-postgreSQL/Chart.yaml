@@ -1,0 +1,6 @@
+apiVersion: v2
+name: vault-postgres
+version: 0.1.0
+description: A Helm chart for deploying HashiCorp Vault with PostgreSQL backend storage
+
+type: application

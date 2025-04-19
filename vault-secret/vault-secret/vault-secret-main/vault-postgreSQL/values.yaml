@@ -1,0 +1,22 @@
+vault:
+  image: hashicorp/vault:1.15.0
+  replicas: 1
+  serviceType: LoadBalancer
+  storagePath: /vault/data
+  storageClass: gp3-csi  # Added storage class for Vault
+  ingress:
+    enabled: true
+    host: vault.cloudmasa.app
+
+postgres:
+  image: postgres:15
+  replicas: 1 
+  serviceType: LoadBalancer
+  storagePath: /var/lib/postgresql/data
+  storageClass: gp3-csi  # Added storage class for PostgreSQL
+  username: vault_user
+  password: vault_password
+  database: vault_db
+  ingress:
+    enabled: true
+    host: postgres.cloudmasa.app

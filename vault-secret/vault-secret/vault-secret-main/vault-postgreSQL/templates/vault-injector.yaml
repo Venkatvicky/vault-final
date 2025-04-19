@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault-agent
+  namespace: vault
+spec:
+  replicas: 1
+  template:
+    spec:
+      automountServiceAccountToken: false  # Disable service account token by default
+      securityContext:
+        runAsUser: 65534  # Use a higher UID
+        runAsGroup: 65534
+        fsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault  # Set seccomp profile
+      containers:
+        - name: vault-agent
+          image: hashicorp/vault@sha256:<digest> # Replace with the actual digest
+          imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - NET_RAW
+                - ALL
+            runAsUser: 65534  # Non-root user with higher UID
+            runAsGroup: 65534
+            fsGroup: 65534
+            seccompProfile:
+              type: RuntimeDefault  # Set seccomp profile
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          volumeMounts:
+            - name: vault-credentials
+              mountPath: /etc/vault-credentials
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8200
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8200
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+      volumes:
+        - name: vault-credentials
+          secret:
+            secretName: vault-credentials  # Ensure this secret exists
