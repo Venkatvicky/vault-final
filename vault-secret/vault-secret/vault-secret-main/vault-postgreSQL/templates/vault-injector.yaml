@@ -25,8 +25,8 @@ spec:
           image: hashicorp/vault:1.19.2
           imagePullPolicy: Always
           securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: true  # Temporarily allow privilege escalation for debugging
+            readOnlyRootFilesystem: false  # Temporarily allow read-write access for debugging
             capabilities:
               drop:
                 - SETFCAP  # Drop the problematic capability
@@ -65,4 +65,4 @@ spec:
       volumes:
         - name: vault-credentials
           secret:
-            secretName: vault-credentials
+            secretName: vault-credentials  # Ensure this secret exists
